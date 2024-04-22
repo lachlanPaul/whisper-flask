@@ -5,6 +5,8 @@
 """
 import os
 
+import mockgpt
+
 import whisper
 from flask import Flask, request, abort
 
@@ -24,7 +26,7 @@ def upload_file():
 
     # Checks to make sure file is only a wav.
     # While other file types could be used, we're going to just stick to using wav files.
-    # Why? Dunno.
+    # Why? ¯\_(ツ)_/¯
     file_extension = files.filename.rsplit('.', 1)[-1]
     if file_extension != "wav":
         abort(415)
@@ -36,7 +38,7 @@ def upload_file():
     # Delete the file to save space, also because I might get shit if I kept recordings of people talking to a robot.
     os.remove(f"uploads/{files.filename}")
 
-    return result["text"]
+    return mockgpt.response_to_text(result["text"])
 
 
 if __name__ == "__main__":
