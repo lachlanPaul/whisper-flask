@@ -1,4 +1,8 @@
-"""Lachlan Paul, 2024"""
+"""
+    File used for testing audio uploads.
+
+    Lachlan Paul, 2024
+"""
 import requests
 
 
