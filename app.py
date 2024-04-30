@@ -48,7 +48,6 @@ def upload_file():
     if client_passcode != PASSCODE:
         abort(401)
 
-    # Transcribe the saved file instead of the file object
     with open(file_path, 'rb') as audio_file:
         whisper_result = WHISPER_MODEL.transcribe(audio_file)
     os.remove(file_path)
