@@ -39,8 +39,6 @@ def upload_file():
     client_passcode = request.headers.get("Passcode")
 
     # Checks to make sure file is only a wav.
-    # While other file types could be used, we're going to just stick to using wav files.
-    # Why? ¯\_(ツ)_/¯
     file_extension = files.filename.rsplit('.', 1)[-1]
     if file_extension != "wav":
         abort(415)
@@ -48,14 +46,14 @@ def upload_file():
     if client_passcode != PASSCODE:
         abort(401)
 
-    with open(file_path, 'rb') as audio_file:
-        whisper_result = WHISPER_MODEL.transcribe(audio_file)
+    whisper_result = WHISPER_MODEL.transcribe(file_path)
+    print(whisper_result["text"])
     os.remove(file_path)
 
     message = client.beta.threads.messages.create(
         thread_id=new_thread.id,
         role="user",
-        content=whisper_result
+        content=whisper_result["text"]
     )
 
     run = client.beta.threads.runs.create_and_poll(
@@ -68,7 +66,11 @@ def upload_file():
             messages = client.beta.threads.messages.list(
                 thread_id=new_thread.id
             )
-            print(messages[-1])
+            for msg in messages.data:
+                if msg.role == 'assistant':
+                    print(msg.content[0].text.value)
+                    return msg.content[0].text.value
+            break
 
 
 if __name__ == "__main__":
