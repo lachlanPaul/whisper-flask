@@ -3,13 +3,18 @@
 
     Lachlan Paul, 2024
 """
+import os
+
 import requests
+from dotenv import load_dotenv
 
 
 def upload_audio(file_path, server_url):
+    load_dotenv()
+
     with open(file_path, 'rb') as audio_file:
         files = {"audio_file": audio_file}
-        headers = {"Passcode": "p$T9wQz2a#R8fL!sE6hGn5vXyY3jU7iKo0bC1xZ4qJmO"}
+        headers = {"Passcode": os.getenv("PASSCODE")}
 
         response = requests.post(server_url, files=files, headers=headers)
 

@@ -12,10 +12,10 @@ from flask import Flask, request, abort
 
 APP = Flask(__name__)
 WHISPER_MODEL = whisper.load_model("base")
-PASSCODE = "p$T9wQz2a#R8fL!sE6hGn5vXyY3jU7iKo0bC1xZ4qJmO"
 
 load_dotenv()
 OPENAI_KEY = os.getenv("OPENAI_KEY")
+PASSCODE = os.getenv("PASSCODE")
 
 client = OpenAI(api_key=OPENAI_KEY)
 
@@ -39,9 +39,9 @@ def upload_file():
     client_passcode = request.headers.get("Passcode")
 
     # Checks to make sure file is only a wav.
-    file_extension = files.filename.rsplit('.', 1)[-1]
-    if file_extension != "wav":
-        abort(415)
+    # file_extension = files.filename.rsplit('.', 1)[-1]
+    # if file_extension != "wav":
+    #     abort(415)
 
     if client_passcode != PASSCODE:
         abort(401)
